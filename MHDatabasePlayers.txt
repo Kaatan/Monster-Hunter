@@ -107,7 +107,7 @@ PD ,4,0,8
 CbSlam ,30,1
 Dcharge1 ,20,1
 Dcharge2 ,10+20,2
-AED=Aed=aed ,70,1)
+AED=Aed=aed ,70,1
 SAED=Saed ,100
 #aed apparait deux fois dans les données, mais le programme ne garde que la première occurence donc c'est bon
 #Pour la charge blade, faire deux fiches de perso une avec Cb chargée et l'autre sans
@@ -141,14 +141,15 @@ HnS=Wildswing ,40,2
 SaFslash ,20,1
 Amorph ,40,1
 Saslash ,30,1
-SaDslash ,30+40,2
+SaDslash ,70,2
 Smorph ,30,1
-Spmorph ,20+30+70,3
+Spmorph ,130,3
 Eldcharge ,20,1
 Eldchargetick ,20,2
+Saphial ,10,1
 #Explosion à entrer par le MJ, de la forme (20+X*20,2+X)
 Zsumdcharge ,28,1
-Zsdchargetick ,12*2,2
+Zsdchargetick ,24,2
 #Zsexplosion à entrer par le MJ, de la forme (30*x+30, x+2)
 
 #Gunlance
