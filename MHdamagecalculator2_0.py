@@ -64,7 +64,7 @@ HPmax=20
 oui=Oui=yes=Yes=True
 non=Non=no=No=False
 
-HPlist=Hplist=("Punya",Punya[HP][0],"Tyrliel",Tyrliel[HP][0],"Shinza",shinza[HP][0],"Minyarr",Minyarr[HP][0],"Garuga",garuga[0][0])
+#HPlist=Hplist=("Punya",Punya[HP][0],"Tyrliel",Tyrliel[HP][0],"Shinza",shinza[HP][0],"Minyarr",Minyarr[HP][0],"Garuga",garuga[0][0])
 
 ##Données des persos
 
@@ -114,6 +114,11 @@ def elementorailmentdisplay(element): #permet d'afficher les éléments lors d'�
     if element==8 :
         return "Explosif"
 
+#def elementmodifier(element):
+  
+  
+    
+
 def sharpcalc(j,p):
     #j pour joueur
     #p pour partie touchée
@@ -140,19 +145,19 @@ def staminacost(j,dmg):
 
 
 
-def dvm(joueur,partiedumonstre,monstre,attaqueutilisée,critique=False,rawpur=0,elempur=0,): #dvm = Damage vs Monstre
-    #j=Nom Joueur
-    #p=Partie touchée : Donne le blindage
-    #m=Monstre
-    #a=Attaque utilisée, liste contenant la valeur totale de dégats ainsi que le nombre de coups
-    #c=Crit ?
+def dvm(critique=False,rawpur=0,elempur=0,): #dvm = Damage vs Monstre
     #elempur=dégats élémentaires purs spécifiques (décharges élémentaires)
     #rawpur=dégats raw purs spécifiques (fioles de choc)
-    j=joueur
-    p=partiedumonstre
-    m=monstre
-    a=attaqueutilisée
+    j0=input("Joueur : ")
+    a=input("Attaque utilisée : ")
+    m0=input("Monstre cible : ")
+    p=input("Résistance aux dégats de la hitzone : ") #entrer un nombre (0 pour faible, 1 pour normal, etc...
+    p=int(p)
     c=critique
+    
+    j=data(j0) #récupération des données du joueur et du monstre via la fonction d'extraction
+    m=data(m0)
+    monstre=m
     atk=j[0]
     AP=j[8]
     CE=j[9]
@@ -250,12 +255,12 @@ def dvm(joueur,partiedumonstre,monstre,attaqueutilisée,critique=False,rawpur=0,
         monstre[0][0]-=120
         m[0][0]-=120
 
-
     #application des dégats infligés au monstre
     monstre[0][0]-=raw+ele
     print("Il reste ",monstre[0][0]," PV au monstre")
     if m[0][0]<=0:
         print("Victoire !")
+
 
 def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueurs
     defphy=j[4]
@@ -331,8 +336,6 @@ def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueu
         else :
             print("HP récupérables :",round((Bc/2)*(1+j[12]/100))) #Pas de regen si le joueur est mort lol
 
-
-
     #affichage des données restantes
     if j[HP][0]<0:
         j[HP][0]=0
@@ -340,8 +343,9 @@ def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueu
     if j[HP][0]==0:
         print("Joueur Ko.")
 
-def heal(joueur,pv):
-    j=joueur
+def heal(): #permet de soigner les joueurs
+    j=input("Joueur à soigner : ")
+    pv=input("Nombre de PV à soigner : ")
     j[HP][0]+=pv
     if j[HP][0]>j[HP][1]:
         j[HP][0]=j[HP][1]
@@ -352,7 +356,7 @@ def heal(joueur,pv):
     if j[HP][0]<=0:
         print("Joueur Ko.")
 
-def buff(joueur, buffcategory,buffnumber):
+def buff(joueur, buffcategory,buffnumber): #permet d'appliquer des buffs aux joueurs
     j=joueur
     b=buffcategory
     n=buffnumber
@@ -381,163 +385,28 @@ def buff(joueur, buffcategory,buffnumber):
 
 
 
-def data(joueur):#extracteur de données
-    f=open('D:/Users/Nicolas/Documents/MHdatabasePlayers.txt', 'r')
+def data(objet):#extracteur de données
+    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdata.txt', 'r')
     donnees=f.readlines()
     parsedData = []
     for line in donnees:
-        if joueur in line and "#" not in line :
-            parsedData.append((line.split(" ",)))
-    print(parsedData)
-    parsedData[0].pop(0)
-    print(parsedData)
-    fdata=parsedData[0]
-    print(fdata)
-    for i in range(fdata) :
-        fdata[i]=int(fdata[i])
-        print(fdata)
+        if objet in line and "#" not in line :
+            parsedData.append((line.split(" ")))
+    parsedData[0].pop(0) #supression du premier terme qui correspond au nom et qui est inutile dans la suite
+    fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
+    for i in range(len(fdata)) :
+        if "," not in fdata[i]:
+            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
+        else :
+            fdata[i]=fdata[i].split(",")
+            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse 
+            for j in range(len(fdata[i])):
+                fdata[i][j]=float(fdata[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
     return fdata
-#modifications à effectuer : supprimer le premier terme qui correspond uniquement au nom, et rentrer des entiers à la place de strings
+
 
 #def datamodifier(joueur): #sert d'intermédiaire entre le programme et le fichier texte. une fois l'algorithme terminé, ce porgramme va modifier les données du fichier texte pour les actualiser et faire en sorte quelles soient utilisables pour l'action suivante.
 
-
-##Base de données des attaques
-
-#Les attaques sont des tuples qui comprennent la puissance, le multiplicateur de coups (important pour les dégats élémentaires), et si nécessaire les dégats KO.
-
-#Sns
-Weak=(24,4)
-Strong=(26,2.5)
-Roundslash=Rslash=(30,1.5)
-Gapcloser=(20,1)
-Shbash=(20,1,20)
-Backstrike1=(25+30,2)
-BsH=(50,1,40)
-BsL=(25,1)
-
-
-#DualBlades
-DbGapclo=(15,1)
-Dbbase=(5+5+7+7,3)
-Fourfold=(8+8+9+9,3)
-Eightfold=(8+8+10+10,3)
-Slingshot=(60,3)
-Demondance=(20+40+60,8)
-Dbrslash=(30,2)
-
-AdFourfold=(7+7+8+8,3)
-AdEightfold=(8+8+9+9,3)
-Adrslash=(28,2)
-AdDemondance=(30+50,6)
-
-
-#longsword
-Vslash=(28,1)
-Thrust=(12,1)
-Tcombo=(12+15,1.5)
-Fadingslash=(25,1)
-Sslash1=(28,1)
-Sslash2=(20,1)
-Sslash3=(10+15+25,2)
-Srslash=(65,1)
-Sthrust=(20)
-Shelmbreaker=(65,2)
-Shelmbreakerred=(130,5)
-Scounter=(25,1)
-
-
-#Greatsword
-Vslash0=(50,1)
-Vslash1=(50*1.3,1)
-Vslash2=(50*1.6,1.5)
-Vslash3=(50*2.2,2)
-Scharge0=(70,1)
-Scharge1=(70*1.3,1)
-Scharge2=(70*1.6,1,5)
-Scharge3=(70*2.2,2)
-Ssweep0=(60,1)
-Ssweep1=(60*1.3,1)
-Ssweep2=(60*1.6,1.5)
-Ssweep3=(60*2.2,2)
-Sbash0=(30,1,20)
-Sbash1=(30*1.3,1,20*1.3)
-Sbash2=(30*1.6,1.5,20*1.6)
-Sbash3=(30*2.2,2,20*2.2)
-
-
-#Lance
-Poke=(12,1)
-Pokecombo=(12+13,2)
-Pokefinisher=(40,1)
-Gcounter1=(40,1)
-Gcounter2=(60,2)
-Assault=Assaut=(24,3)
-#Assaultfinisher àentrer par le MJ
-
-
-#Chargeblade
-Bslash=(13,1)
-Cslash=(12+13,2)
-Cbgapclo=(20,1)
-Cdbslash=(25+30,2)
-CbRslash=(27,1)
-CbFslash=(20,1)
-PD=(4,0,8)
-CbSlam=(30,1)
-Dcharge1=(20,1)
-Dcharge2=(10+20,2)
-AED=Aed=aed=(70,1) #+6PD
-SAED=Saed=(20+80) #+X PD
-#Pour la charge blade, faire deux fiches de perso (une avec Cb chargée et l'autre sans
-
-
-#Bow
-Shot1=(10,1)
-Shot2=(26,2.5)
-Shot3=(45,3.7)
-Shot4=(17*4,5)
-Spread0=(20,2)
-Spread1=(30,3.5)
-Spread2=(40,4.8)
-Spread3=(50,6)
-Spread4=(60,7)
-#Dragonpiercer à vois avec le MJ
-
-
-#Hammer
-#Bien penser à donner un bonus de 2 en sharpness
-Smash=(30,1,20)
-Homerun=(50,1,50)
-Charge1=Smash
-Uppercut=(40,1,70)
-Rollthunder=(20*2,2,20)
-Bigbang=(10+25+100,3,90)
-
-#Swithcaxe
-Aslam=(30,1)
-HnS=Wildswing=(40,2)
-SaFslash=(20,1)
-Amorph=(40,1)
-Saslash=(30,1)
-SaDslash=(30+40,2)
-Smorph=(30,1)
-Spmorph=(20+30+70,3)
-Eldcharge=(20,1)
-Eldchargetick=(20,2)
-#Explosion à entrer par le MJ, de la forme (20+X*20,2+X)
-Zsumdcharge=(28,1)
-Zsdchargetick=(12*2,2)
-#Zsexplosion à entrer par le MJ, de la forme (30*x+30, x+2)
-
-#Gunlance
-GlPoke=(20,1)
-GdPoke=(17,1)
-Shot=(10,0)
-Chargedshot=Cshot=(25,0)
-Slam=(35,1)
-#Boom=burstshot à entrer par le MJ (10*X,0)
-Wyvernfire=(150,0)
 
 
 
