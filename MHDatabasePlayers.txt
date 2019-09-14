@@ -1,19 +1,161 @@
-Shinza 149 Bleue 35 -1 65 10 -5 -7 0 0 65 0 0 0 0 1 5 95 0
+Shinza 149 4 35 ,-1,0 65 ,10,-5,-7,0,0,65 0 0 0 0 1 5 95 0
 
-Punya 171 Bleue 25 0 5 70 5 0 -5 5 0 70 20 0 0 0 0 75 80 0
 
-Tyrliel 174 Vert -25 -1 80 -5 5 0 0 10 80 50 50 0 0 0 9 115 0
+Punya 171 4 25 ,0,5 70 ,5,0,-5,5,0,70 20 0 0 0 0 75 80 0
 
-Minyarr 127 Jaune 25 3 10 51 10 0 2 5 5 60 0 0 1 0 0 80 80 0
 
-test 171 Bleue 25 8 5 70 5 0 -5 5 0 70 20 0 0 0 0 75 80 0
+Tyrliel 174 3 -25 ,-1,0 80 ,-5,5,0,0,10,80 50 50 0 0 0 9 115 0
 
-Garuga=garuga= 3000 3000 100 0 66 33 33 300 300 0 200 200 0 120 120 0 150 150 0 70 70 0
 
-Garugatest=garugatest=3000 3000 95 0 66 33 33 300 300 0 200 200 0 120 120 0 150 150 0 70 70 0
+Minyarr 127 2 25 ,3,10 51 ,10,0,2,5,5,60 0 0 1 0 0 80 80 0
+
+
+test 171 4 25 ,8,5 70 5,0,-5,5,0,70 20 0 0 0 0 75 80 0
+
+Garuga=garuga= ,3000,3000 ,100,0,66,33,33 ,300,300,0 ,200,200,0 ,120,120,0 150,150,0 ,70,70,0
+
+
+Garugatest=garugatest= ,3000,3000 ,95,0,66,33,33 ,300,300 0 ,200,200,0 ,120,120,0 ,150,150,0 ,70,70,0
+
+
 
 #NomJoueur=[Attaque, Sharpness, DégatsAffinité, [Element , dégats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire générale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100]
 
+#nommonstre Pv, Pvmax, Res feu, eau, foudre, glace, dragon, pv ko, pvkomax, nbko, de même pour poison, paralysie, someil et explosion
 
-#Pense à utiliser le terminal pour faire les simulations et lacner python (utiliser des / à la place des \ pour référencier le dossier
-#Pesner à mettre ce fichier dans le lien du programme 2_0 pour la base de données
+#Penser à utiliser le terminal pour faire les simulations et lacner python (utiliser des / à la place des \ pour référencier le dossier
+#Penser à mettre ce fichier dans le lien du programme 2_0 pour la base de données
+
+
+Weak ,24,4
+Strong ,26,2.5
+SnSRslash=Rslash ,30,1.5
+Gapcloser ,20,1
+Shbash ,20,1,20
+Backstrike1 ,55,2
+BsH ,50,1,40
+BsL ,25,1
+
+
+#DualBlades
+DbGapclo ,15,1
+Dbbase ,20,3
+Fourfold ,30,3
+Eightfold ,35,3
+Slingshot ,60,3
+Demondance ,120,8
+Dbrslash ,30,2
+
+AdFourfold ,25,3
+AdEightfold ,30,3
+Adrslash ,25,2
+AdDemondance ,80,6
+
+
+#longsword
+LsVslash ,28,1
+Thrust ,12,1
+Tcombo ,27,1.5
+Fadingslash ,25,1
+Sslash1 ,28,1
+Sslash2 ,20,1
+Sslash3 ,50,2
+Srslash ,65,1
+Sthrust ,20
+Shelmbreaker ,65,2
+Shelmbreakerred ,130,5
+Scounter ,25,1
+
+
+#Greatsword
+Vslash0 ,50,1
+Vslash1 ,65,1
+Vslash2 ,80,1.5
+Vslash3 ,110,2
+Scharge0 ,70,1
+Scharge1 ,91,1
+Scharge2 ,112,1,5
+Scharge3 ,154,2
+Ssweep0 ,60,1
+Ssweep1 ,78,1
+Ssweep2 ,96,1.5
+Ssweep3 ,132,2
+Sbash0 ,30,1,20
+Sbash1 ,39,1,26
+Sbash2 ,48,1.5,32
+Sbash3 ,66,2,44
+
+
+#Lance
+LPoke ,15,1
+Pokecombo ,28,2
+Pokefinisher ,40,1
+Gcounter1 ,40,1
+Gcounter2 ,60,2
+Assault=Assaut ,24,3
+#Assaultfinisher à entrer par le MJ
+
+
+#Chargeblade
+Cbslash ,13,1
+Cbcslash ,25,2
+Cbgapclo ,20,1
+Cdbslash ,55,2
+CbRslash ,30,1
+CbFslash ,20,1
+PD ,4,0,8
+CbSlam ,30,1
+Dcharge1 ,20,1
+Dcharge2 ,10+20,2
+AED=Aed=aed ,70,1)
+SAED=Saed ,100
+#aed apparait deux fois dans les données, mais le programme ne garde que la première occurence donc c'est bon
+#Pour la charge blade, faire deux fiches de perso une avec Cb chargée et l'autre sans
+
+
+#Bow
+Shot1 ,10,1
+Shot2 ,26,2.5
+Shot3 ,45,3.7
+Shot4 ,62,5
+Spread0 ,20,2
+Spread1 ,30,3.5
+Spread2 ,40,4.8
+Spread3 ,50,6
+Spread4 ,60,7
+#Dragonpiercer à voir avec le MJ
+
+
+#Hammer
+#Bien penser à donner un bonus de 2 en sharpness (fait)
+Smash ,30,1,20
+Homerun ,50,1,50
+
+Uppercut ,40,1,70
+Rollthunder ,30,2,20
+Bigbang ,135,3,90
+
+#Swithcaxe
+Aslam ,30,1
+HnS=Wildswing ,40,2
+SaFslash ,20,1
+Amorph ,40,1
+Saslash ,30,1
+SaDslash ,30+40,2
+Smorph ,30,1
+Spmorph ,20+30+70,3
+Eldcharge ,20,1
+Eldchargetick ,20,2
+#Explosion à entrer par le MJ, de la forme (20+X*20,2+X)
+Zsumdcharge ,28,1
+Zsdchargetick ,12*2,2
+#Zsexplosion à entrer par le MJ, de la forme (30*x+30, x+2)
+
+#Gunlance
+GlPoke ,20,1
+GdPoke ,17,1
+GlShot ,10,0
+Chargedshot=Cshot ,25,0
+Slam ,35,1
+#Boom=burstshot à entrer par le MJ (10*X,0)
+Wyvernfire ,150,0
