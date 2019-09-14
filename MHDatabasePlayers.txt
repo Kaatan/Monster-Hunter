@@ -12,4 +12,8 @@ Garuga=garuga= 3000 3000 100 0 66 33 33 300 300 0 200 200 0 120 120 0 150 150 0 
 
 Garugatest=garugatest=3000 3000 95 0 66 33 33 300 300 0 200 200 0 120 120 0 150 150 0 70 70 0
 
-#NomJoueur=[Attaque, Sharpness, D�gatsAffinit�, [Element , d�gats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire g�n�rale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100]
+#NomJoueur=[Attaque, Sharpness, DégatsAffinité, [Element , dégats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire générale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100]
+
+
+#Pense à utiliser le terminal pour faire les simulations et lacner python (utiliser des / à la place des \ pour référencier le dossier
+#Pesner à mettre ce fichier dans le lien du programme 2_0 pour la base de données
