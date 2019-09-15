@@ -116,7 +116,7 @@ def elementorailmentdisplay(element): #permet d'afficher les éléments lors d'�
 
 #def elementmodifier(element):
   
-def strtointbuff(type):
+def strtointbuff(type): #permet de convertir un string en la valeur qui lui est associée
     if type == "HP" or type=="Hp" or type== "hp":
         return 11
     if type == "Attaque" or type=="attaque" or "att" in type:
@@ -139,14 +139,38 @@ def strtointbuff(type):
         return 4
     if "arpness" in type or "anchant" in type :
         return 10
- 
+
+#faire un programme qui extrit du fichier les points faibles des onstres en fonction de l'endroit visé
+
+
+def elementreversedisplay(str):
+    if "ire" in str or "eu" in str:
+        return 0
+    if "au" in str:
+        return 1
+    if "oudre" in str :
+        return 2
+    if "lace" in str :
+        return 3
+    if "ragon" in str :
+        return 4
+    if "oison" in str :
+        return 5
+    if "alysie" in str:
+        return 6
+    if "ommeil" in str:
+        return 7
+    if "xplosi" in str:
+        return 8
+    else:
+        return -1 #si aucun n'est validé, on considère qu'il n'y en a pas
 
 def sharpcalc(j,p):
     #j pour joueur
     #p pour partie touchée
     #Principe de l'algo : donne un bonus en fonction de la sharp et un malus en fonction du blindage, puis compile tout pour donner la proba
     #rappel : j[10] correspond au bonus de sharpness du joueur, du à des bonus externes ou aux propriétés de son arme
-    co=j[1]
+    co=int(j[1])
     b=Sharpness[co+7]+j[10]
     c=Blindage[p+5]
     tot=b+c #chance totale sur 10 est les chances de base c plus le bonus b
@@ -154,10 +178,10 @@ def sharpcalc(j,p):
         return 10
     if b+c<0:
         return 0
-    return b+c
+    return b+c #proba sur 10 de perforer
 
 
-def staminacost(j,dmg):
+def staminacost(j,dmg): #stamina cost du blocage. les valeurs du bouclier sont contenues dans j.
     #j pour joueur
     #dmg pour l'attaque du monstre
     s=round(3-(round((j[6]-dmg)/10)))
@@ -167,28 +191,38 @@ def staminacost(j,dmg):
 
 
 
-def dvm(critique=False,rawpur=0,elempur=0,): #dvm = Damage vs Monstre
+def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
     #elempur=dégats élémentaires purs spécifiques (décharges élémentaires)
     #rawpur=dégats raw purs spécifiques (fioles de choc)
     j0=input("Joueur : ")
     a0=input("Attaque utilisée : ")
+    if "spe" in a0: #si jamais nécessité de mettre un coup spécial type DragonPiercer
+        dg=int(input("Dégats du coup spécial : "))
+        em=float(input("Multiplicité élémentaire du coup spécial : "))
+        gk=input("Dégats de KO du coup spécial : ")
+        if gk=="":
+            a=[dg,em]
+        else:
+            a=[dg,em,gk]
+    else:
+        a=datao(a0)
     m0=input("Monstre cible : ")
     p0=input("Résistance aux dégats de la hitzone : ") #entrer un nombre (0 pour faible, 1 pour normal, etc...
     p=strtointbuff(p0)
     c=critique
     data=datable()
     j=dataj(j0) #récupération des données du joueur et du monstre via la fonction d'extraction
-    m=data(m0)
+    m=dataj(m0)
     monstre=m
     atk=j[Attaque]
-    a=datao(a0)
+    
     AP=j[8]
     CE=j[9]
     if c==True :
         Cd=(100+j[2])/100 #cd for crit damage multiplier
     else :
         Cd=1
-    Sh=Sharpness[j[1]]
+    Sh=Sharpness[int(j[1])]
     if j[3]!= None:
         if j[3][0]<5:#Disjonction entre les éléments et les ailments (?)
             Elem=j[3][0]
@@ -211,48 +245,51 @@ def dvm(critique=False,rawpur=0,elempur=0,): #dvm = Damage vs Monstre
         CE=Cd #attribution des dégats crit aux éléments si Critical element est actif
     else:
         CE=1
-
+    Elem=int(Elem)
+    Ailment=int(Ailment)
     #calcul de la réduction de dégats due au blindage.
-    red=(100-Bl[p-AP])/100
+    red=(100-Bl[int(p-AP)])/100
     if a[1]==0:
         red=1
 
     #calcul des dégats initiaux : dégats de base/100 * attaque * resistance du monstre * sharpness * crit
     raw=round(((a[0]+rawpur)/100)*atk*(red)*Sh*Cd)
-    ele=round((a[1]*Eledmg+elempur)*(1-(m[2][Elem]/100))*CE*Sh*red)
+    ele=round((a[1]*Eledmg+elempur)*(1-(m[2][int(Elem)]/100))*CE*Sh*red)
     #affichage des valeurs
-    if a[1]!=0:
+    if a[1]!=0 and (Elem!=-1 or Ailment!=-1): #on n'affiche pas de dégats élémentaires si l'attaque est non élémentaire (type Glshot) ou si le personnage n'a pas d'élément.
         print("Raw = ",raw, "Elemental = ", ele, elementorailmentdisplay(Elem))
     else :
         print("Raw= ",raw, ", Attaque non élémentaire.")
+    print(" ")
     print("Total = ", raw+ele)
+    print(" ")
    
-   #cas aprticulier du KO :
+   #cas particulier du KO :
     if len(a)==3 and p==tête:
         DmgKO=a[2]
         print("Dégats KO = ",a[2])
-        monstre[2][0]-=DmgKO
+        monstre[3][0]-=DmgKO
         print("Il reste",monstre[3][0],"PV en KO au monstre")
 
     #calcul des chances de perforation
-    perfo=sharpcalc(j,p-AP)
-    if perfo==10 and a[1]!=0 :#or  a[0]>=Bl[p-AP]:
+    perfo=sharpcalc(j,int(p-AP))
+    if (perfo==10 and a[1]!=0): 
         print("Pas de rebond possible")
         #if a[0]>=Bl[p-AP]:
             #print("(Armor Override)") #Si la puissance de base d'une attaque dépasse la résistance de la partie de la cible , le coup traverse peu importe le blindage
-    if perfo==0 and  a[0]<Bl[p-AP]:
+    if perfo==0 and  a[0]<Bl[int(p-AP)]:
         print("Rebond obligatoire")
-    if perfo>0 and perfo<10 and a[0]<Bl[p-AP]:
+    if perfo>0 and perfo<10 and a[0]<Bl[int(p-AP)]:
         print("Chances de perforer = ",perfo,"/10")
 
 
 
     #disjonctions de cas en fonction des ailments
     if Ailment!=-1 and a[1]!=0 : #a[1]=0 implique que l'attaque est non élémentale
-        monstre[Ailment-2][0]-=round(Ailmentdmg*a[1])
+        monstre[int(Ailment-1)][0]-=round(Ailmentdmg*a[1])
         print("Le monstre accumule ",round(Ailmentdmg*a[1])," PV en ", elementorailmentdisplay(Ailment))
-        print("Chances de statut = ",round((Ailmentdmg/(2*monstre[Ailment-2][1]))*100),"/100")
-        print("PV restants dans le statut considéré",monstre[Ailment-2][0],"/",monstre[Ailment-2][1])
+        print("Chances de statut = ",round((Ailmentdmg/(2*monstre[int(Ailment-1)][1]))*100),"/100")
+        print("PV restants dans le statut considéré",monstre[int(Ailment-1)][0],"/",monstre[int(Ailment-1)][1])
     if monstre[3][0]<=0 :
         m[3][2]+=1 #incrémentation du compteur de KO
         monstre[3][0]=monstre[3][1]*0.5*(1+monstre[3][2]) #Réinitialisation avec augmentation du palier de KO en fonction du nombre de KO
@@ -277,18 +314,25 @@ def dvm(critique=False,rawpur=0,elempur=0,): #dvm = Damage vs Monstre
         monstre[7][0]=round(monstre[7][1]*(1+m[7][2]*0.1))
         monstre[7][1]=monstre[7][0]
         print("BOOM ! 120 PV !")
-        monstre[0][0]-=120
+        monstre[1][0]-=120
         m[1][0]-=120
-
     #application des dégats infligés au monstre
-    tablemod2(data,m) #modification de la ligne de code correspondant au monstre
-    print("Il reste ",monstre[0][0]," PV au monstre")
-    if m[0][0]<=0:
+    monstre[1][0]-=raw+ele
+    print("Il reste ",int(monstre[1][0])," PV au monstre")
+    if m[1][0]<=0:
         print("Victoire !")
+    tablemod2(data,m) #modification de la ligne de code correspondant au monstre
+    datascripter(data)
+    
 
 
-def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueurs
+def dvj(Blocage=False, blessing=False): #dégats v joueurs
     data=datable()
+    j0=input("Joueur ciblé : ")
+    dmg0=input("Dégats non élémentaire : ")
+    Ele0=input("Element utilisé : ")
+    Eledmg0=input("Dégats élémentaires : ")
+    Ele=elementreversedisplay(Ele0)
     defphy=j[4]
     defele=j[5][5]
     if blessing:
@@ -302,7 +346,7 @@ def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueu
         #Attribution à Sh de la valeur du bouclier s'il est utilisé. Sh vaut 0 par défaut (pas de bouclier ou non utilisé)
     redphy=defphy/(30+defphy) #Reduction de dégats physique
     if not Ele==None:
-        modele=(100-3*(j[5][Ele]))/100 #modification elementaire = (100-3 fois la res élémentaire correspondante)/100
+        modele=(100-3*(j[5][int(Ele)]))/100 #modification elementaire = (100-3 fois la res élémentaire correspondante)/100
     else:
         modele=1
     if modele<0:
@@ -367,6 +411,7 @@ def dvj(j,dmg,Ele=-1, Eledmg=0, Blocage=False, blessing=False): #dégats v joueu
     if j[HP][0]==0:
         print("Joueur Ko.")
     tablemod2(data,j)
+    datascripter(data)
 
 def heal(): #permet de soigner les joueurs #attention, à adapter avec le fichier texte
     data=datable()
@@ -383,9 +428,10 @@ def heal(): #permet de soigner les joueurs #attention, à adapter avec le fichie
     if j[HP][0]<=0:
         print("Joueur Ko.")
     tablemod2(data,j)
+    datascripter(data)
 
 def buff(): #permet d'appliquer des buffs aux joueurs, à adapter au fichier texte
-    data=datable[]
+    data=datable()
     j0=input("Joueur à Buff : ")
     b0=input("Catégorie du buff : ")
     n0=input("Valeur du buff :")
@@ -415,6 +461,18 @@ def buff(): #permet d'appliquer des buffs aux joueurs, à adapter au fichier tex
         j[b]+=n
         print("Nouvelle valeur : ",j[b])
     tablemod2(data,j)
+    datascripter(data)
+
+def réinitialiser():
+    data=datable()
+    for i in range(4):
+        data[HP][0]=data[HP][1]
+    
+
+#Choses à faire à l'avenir :
+#Faire dans le fichier "non modifiable" une base de donnée des stats des persos dans leur état au repos.
+#Faire un programme qui permet de modifier les stats de base des eprsos hors combat (programme upgrade())
+#Compléter le programme réinitialiser() pour remettre les eprsos dans leur état hors combat.
 
 
 
@@ -427,12 +485,12 @@ def buff(): #permet d'appliquer des buffs aux joueurs, à adapter au fichier tex
 
 
 def datao(objet): #S'utilise sur un fichier qui contient des informations fixes (typiquement les attaques)
-    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdata.txt', 'r')
+    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdataFixe.txt', 'r')
     donnees=f.readlines()
     parsedData = []
     for line in donnees:
         if objet in line and "#" not in line :
-            parsedData.append((line.split(" ")))
+            parsedData.append(line.split(" "))
     parsedData[0].pop(0) #supression du premier terme qui correspond au nom et qui est inutile dans la suite
     fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
     for i in range(len(fdata)) :
@@ -454,16 +512,13 @@ def dataj(objet):#extracteur de données dans un fichier qui sera modifiable
         if objet in line and "#" not in line :
             parsedData.append((line.split(" ")))
     fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
-    print(fdata)
     for i in range(1,len(fdata)) :
         if "," not in fdata[i]:
-            print(fdata[i])
             fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
         else :
             fdata[i]=fdata[i].split(",")
             fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse 
             for j in range(len(fdata[i])):
-                print(fdata[i][j])
                 fdata[i][j]=float(fdata[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
     return fdata
 
@@ -492,30 +547,26 @@ def datable(): #renvoie un tableau composé des lignes du fichier texte. C'est c
             t.append((line.split(" "))) 
     for j in range(len(t)):
         l=t[j]#l est une liste de caractères
-        print(l)
         
         for i in range(1,len(l)) :
             if "," not in l[i]:
-                print(l[i])
-                
                 l[i]=float(l[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
             else :
                 l[i]=l[i].split(",")
                 l[i].pop(0) #le premier terme est une ",", on s'en débarasse 
                 for j in range(len(l[i])):
-                    print(l[i][j])
                     l[i][j]=float(l[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
         tf.append(l)
     return tf
 #pour le gros tableau, on réinsère les lignes qu'on a modifié en effaçant celle d'avavtn. système pour reconnaître la bonne ligne : if nomjoueur in ligne tableau
 
-def tablemod(t,objet,idmod,mod): #permet de modifier une valeur en particulier du tableau
+def tablemod(t,objet,idmod,mod): #permet de modifier une valeur en particulier du tableau (non utilisé pour le moment)
     for i in range(len(t)):
         if objet in t[i][0]:
             t[i][idmod]+=mod
             
 def tablemod2(t,ligne): #permet d'incorporer les lignes modifiées directement dans le tableau
-    for i in range(t):
+    for i in range(len(t)):
         if t[i][0]==ligne[0]:
             t[i]=ligne
             
@@ -524,6 +575,7 @@ def tablemod2(t,ligne): #permet d'incorporer les lignes modifiées directement d
 
 
 #D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdata.txt
+
 
 
 
