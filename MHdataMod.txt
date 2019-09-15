@@ -1,0 +1,26 @@
+Shinza 4 35 ,-1,0 65 ,10,-5,-7,0,0,65 0 0 0 0 1 ,95,95 0 149
+
+Punya 4 25 ,0,5 70 ,5,0,-5,5,0,70 20 0 0 0 0 ,75,80 0 171
+
+Tyrliel 3 -25 ,-1,0 80 ,-5,5,0,0,10,80 50 50 0 0 0 ,96,115 0 174
+
+Minyarr 2 25 ,3,10 51 ,10,0,2,5,5,60 0 0 1 0 0 ,80,80 0 127
+
+
+test 4 25 ,8,5 70 5,0,-5,5,0,70 20 0 0 0 0 ,75,80 0 171
+
+garuga ,3000,3000 ,100,0,66,33,33 ,300,300,0 ,200,200,0 ,120,120,0 150,150,0 ,70,70,0
+
+
+
+
+
+#NomJoueur=[nomjoueur,  Sharpness, DégatsAffinité, [Element , dégats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire générale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100, attaque]
+
+
+#nommonstre nommonstre, Pv, Pvmax, Res feu, eau, foudre, glace, dragon, pv ko, pvkomax, nbko, de même pour poison, paralysie, someil et explosion
+
+#Penser à utiliser le terminal pour faire les simulations et lacner python (utiliser des / à la place des \ pour référencier le dossier
+#Penser à mettre ce fichier dans le lien du programme 2_0 pour la base de données
+
+
