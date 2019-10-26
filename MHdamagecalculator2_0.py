@@ -71,7 +71,7 @@ non=Non=no=No=False
 
 
 
-#NomJoueur=[Attaque, Sharpness, DégatsAffinité, [Element , dégats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire générale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100]
+#NomJoueur=[, Sharpness, DégatsAffinité, [Element , dégats], Def Phy, [Res Feu, Eau, Foudre, Glace, Dragon, Res elementaire générale], Shield capacity, Blessing value, Armor Penetration, Critical Element, Sharpness bonus, (HP,Hpmax), recovery bonus en points sur 100,Attaque]
 
 test="garugatest"
 ##Données du monstre :
@@ -88,11 +88,10 @@ Queue=queue=Blindé
 Ailes=ailes=Moyen
 Pattes=pattes=Moyen
 
-Garuga=garuga=[[3000,3000],[100,0,66,33,33],[300,300,0],[200,200,0],[120,120,0],[150,150,0],[70,70,0]]
-Garugatest=garugatest=[[3000,3000],[95,0,66,33,33],[300,300,0],[200,200,0],[120,120,0],[150,150,0],[70,70,0]]
+
 #mettre un hashtag lorsque le combat en commencé pour éviter de réinitialiser les valeurs en HP des monstres et joueurs par accident lors d'un crtl+e
 
-##Algorithmes
+##Comfort
 
 def elementorailmentdisplay(element): #permet d'afficher les éléments lors d'évènements print en fonction de leur valeur.
     if element ==0 :
@@ -115,7 +114,7 @@ def elementorailmentdisplay(element): #permet d'afficher les éléments lors d'�
         return "Explosif"
 
 #def elementmodifier(element):
-  
+
 def strtointbuff(type): #permet de convertir un string en la valeur qui lui est associée
     if type == "HP" or type=="Hp" or type== "hp":
         return 11
@@ -189,18 +188,18 @@ def staminacost(j,dmg): #stamina cost du blocage. les valeurs du bouclier sont c
     return(s)#retourne le stamina cost PUR, qui sera tronqué par la suite
 
 
-
+##En combat
 
 def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
     #elempur=dégats élémentaires purs spécifiques (décharges élémentaires)
     #rawpur=dégats raw purs spécifiques (fioles de choc)
     j0=input("Joueur : ")
     a0=input("Attaque utilisée : ")
-    if "spe" in a0: #si jamais nécessité de mettre un coup spécial type DragonPiercer
+    if "spe" in a0 or "Spe" in a0: #si jamais nécessité de mettre un coup spécial type DragonPiercer
         dg=int(input("Dégats du coup spécial : "))
         em=float(input("Multiplicité élémentaire du coup spécial : "))
         gk=input("Dégats de KO du coup spécial : ")
-        if gk=="":
+        if gk=="" or gk=="0" or gk==0:
             a=[dg,em]
         else:
             a=[dg,em,gk]
@@ -210,12 +209,12 @@ def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
     p0=input("Résistance aux dégats de la hitzone : ") #entrer un nombre (0 pour faible, 1 pour normal, etc...
     p=strtointbuff(p0)
     c=critique
-    data=datable()
+    data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
     j=dataj(j0) #récupération des données du joueur et du monstre via la fonction d'extraction
     m=dataj(m0)
     monstre=m
     atk=j[Attaque]
-    
+
     AP=j[8]
     CE=j[9]
     if c==True :
@@ -263,7 +262,7 @@ def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
     print(" ")
     print("Total = ", raw+ele)
     print(" ")
-   
+
    #cas particulier du KO :
     if len(a)==3 and p==tête:
         DmgKO=a[2]
@@ -273,7 +272,7 @@ def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
 
     #calcul des chances de perforation
     perfo=sharpcalc(j,int(p-AP))
-    if (perfo==10 and a[1]!=0): 
+    if (perfo==10 and a[1]!=0):
         print("Pas de rebond possible")
         #if a[0]>=Bl[p-AP]:
             #print("(Armor Override)") #Si la puissance de base d'une attaque dépasse la résistance de la partie de la cible , le coup traverse peu importe le blindage
@@ -322,17 +321,26 @@ def dvm(critique=False,rawpur=0,elempur=0): #dvm = Damage vs Monstre
     if m[1][0]<=0:
         print("Victoire !")
     tablemod2(data,m) #modification de la ligne de code correspondant au monstre
-    datascripter(data)
-    
+    datascripter(data,'D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
+
 
 
 def dvj(Blocage=False, blessing=False): #dégats v joueurs
-    data=datable()
+    data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
     j0=input("Joueur ciblé : ")
     dmg0=input("Dégats non élémentaire : ")
     Ele0=input("Element utilisé : ")
     Eledmg0=input("Dégats élémentaires : ")
     Ele=elementreversedisplay(Ele0)
+    if dmg0!= "":
+        dmg=int(dmg0)
+    else:
+        dmg=0
+    if Eledmg0!= "":
+        Eledmg=int(Eledmg0)
+    else:
+        Eledmg=0
+    j=dataj(j0)
     defphy=j[4]
     defele=j[5][5]
     if blessing:
@@ -345,15 +353,17 @@ def dvj(Blocage=False, blessing=False): #dégats v joueurs
         Sh=0
         #Attribution à Sh de la valeur du bouclier s'il est utilisé. Sh vaut 0 par défaut (pas de bouclier ou non utilisé)
     redphy=defphy/(30+defphy) #Reduction de dégats physique
-    if not Ele==None:
+    if not (Ele==None or Ele==-1):
         modele=(100-3*(j[5][int(Ele)]))/100 #modification elementaire = (100-3 fois la res élémentaire correspondante)/100
+
+
     else:
         modele=1
     if modele<0:
         modele=0 #une résistance si forte qu'elle rend le modificateur négatif modifie la valeur de modification à 0
-    redele=defele/(30+defele)*modele #Reduction de dégats élémentaire
+    redele=defele/(30+defele) #Reduction de dégats élémentaire
     raw=round(dmg*(1-redphy))*red #Dégats de base non élémentaires
-    elem=round(Eledmg*(1-redele))*red #Dégats de base élémentaires
+    elem=round(Eledmg*(1-redele))*red*modele #Dégats de base élémentaires
     svg=round(raw+elem)
     if raw+elem-Sh<0:
         Sh=raw+elem
@@ -364,7 +374,7 @@ def dvj(Blocage=False, blessing=False): #dégats v joueurs
         #Si le bouclier est plus fort que l'attaque, les dégats subis sont ramenés à 0
 
     #affichage des données
-    print("Raw basic = ",raw, "Ele basic = ", elem,". Total brut =",svg)
+    print("Raw basic = ",raw, "Ele basic = ", round(elem),". Total brut =",svg)
 
 
     #calcul des marqueurs d'endurance
@@ -381,7 +391,7 @@ def dvj(Blocage=False, blessing=False): #dégats v joueurs
         else:
             bool="oui"
 
-        if bool=="True" or bool=="oui" or bool == "true" :
+        if bool=="True" or bool=="oui" or bool == "true" or bool == "Oui":
             j[HP][0]-=Bc #modification de la jauge de vie du joueur
             if Bc>0:
                 print("Le joueur bloque",svg-Bc, "et perd ",Bc,"PV")
@@ -396,6 +406,9 @@ def dvj(Blocage=False, blessing=False): #dégats v joueurs
             j[HP][0]-=hploss1
             print("Le joueur bloque",svg-hploss1, "et perd ",hploss1,"PV")
 
+    print()
+    print("Dégats subis =",Bc)
+    j[HP][0]-=Bc
     if j[HP][0]>0:
         if Blocage :
             if bool=="True" or bool=="oui" or bool == "true" :
@@ -405,18 +418,19 @@ def dvj(Blocage=False, blessing=False): #dégats v joueurs
             print("HP récupérables :",round((Bc/2)*(1+j[12]/100))) #Pas de regen si le joueur est mort lol
 
     #affichage des données restantes
+
     if j[HP][0]<0:
         j[HP][0]=0
     print(j[HP][0], "PV restants")
     if j[HP][0]==0:
         print("Joueur Ko.")
     tablemod2(data,j)
-    datascripter(data)
+    datascripter(data,'D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
 
 def heal(): #permet de soigner les joueurs #attention, à adapter avec le fichier texte
-    data=datable()
+    data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
     j0=input("Joueur à soigner : ")
-    pv=input("Nombre de PV à soigner : ")
+    pv=int(input("Nombre de PV à soigner : "))
     j=dataj(j0)#j[HP][0]+=pv à modifier avec la nouvelle méthode
     j[HP][0]+=pv
     if j[HP][0]>j[HP][1]:
@@ -424,14 +438,14 @@ def heal(): #permet de soigner les joueurs #attention, à adapter avec le fichie
     if pv>=0:
         print(pv,"HP récupérés. Total",j[HP][0])
     if pv<0:
-        print(pv, "HP perdus. Restants",j[HP][0])
+        print(-pv, "HP perdus. Restants",j[HP][0])
     if j[HP][0]<=0:
         print("Joueur Ko.")
     tablemod2(data,j)
-    datascripter(data)
+    datascripter(data,'D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
 
 def buff(): #permet d'appliquer des buffs aux joueurs, à adapter au fichier texte
-    data=datable()
+    data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
     j0=input("Joueur à Buff : ")
     b0=input("Catégorie du buff : ")
     n0=input("Valeur du buff :")
@@ -461,31 +475,55 @@ def buff(): #permet d'appliquer des buffs aux joueurs, à adapter au fichier tex
         j[b]+=n
         print("Nouvelle valeur : ",j[b])
     tablemod2(data,j)
-    datascripter(data)
+    datascripter(data,'D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
 
-def réinitialiser():
-    data=datable()
+
+
+
+def reinitialiser(): #à tester
+    datamod=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
+    dataini=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatadini.txt')
+    for i in range(len(datamod)):
+        for j in range(len(dataini)):
+            if datamod[i][0]==dataini[j][0]:
+                datamod[i]=datamod[j] #on remplace les valeurs de combats par les valeurs hors combat.
+    datascripter(datamod,'D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
+
+
+
+def HPlist():
+    data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt')
     for i in range(4):
-        data[HP][0]=data[HP][1]
-    
+        print(data[i][0]," : ",data[i][HP][0],"/",data[i][HP][1])
 
 #Choses à faire à l'avenir :
 #Faire dans le fichier "non modifiable" une base de donnée des stats des persos dans leur état au repos.
 #Faire un programme qui permet de modifier les stats de base des eprsos hors combat (programme upgrade())
-#Compléter le programme réinitialiser() pour remettre les eprsos dans leur état hors combat.
+#Compléter le programme réinitialiser() pour remettre les persos dans leur état hors combat à partir du fichier non modifiable.
+
+##Hors combat
+
+
+#def change() fonction ayant pour but de modifier le fichier des données initiales pour réaliser des modifications d'upgrade
+    #data=datable('D:/Users/Nicolas/Documents/MHjdr/MHdatadini.txt')
+    #j0=input("Joueur à changer : ")
+    #j=dataini(j0)
+
+
+
 
 
 
 ##Data analyser
 
-#Les algorithmes suivant interagissent avec un tableau de valeurs qui donne les infos des joueurs et un fichier tete qui sert à les sauvegarder. Le tableau sera de la forme [Joueur1,joueur2,joueur3,joueur4,monstre].
+#Les algorithmes suivant interagissent avec un tableau de valeurs qui donne les infos des joueurs et un fichier tete qui sert à les sauvegarder. Le tableau sera de la forme [Joueur1,joueur2,joueur3,joueur4,monstre]. (a priori)
 
 
 
 
 
 def datao(objet): #S'utilise sur un fichier qui contient des informations fixes (typiquement les attaques)
-    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdataFixe.txt', 'r')
+    f=open('D:/Users/Nicolas/Documents/MHjdr/MHdatafixe.txt', 'r')
     donnees=f.readlines()
     parsedData = []
     for line in donnees:
@@ -495,17 +533,17 @@ def datao(objet): #S'utilise sur un fichier qui contient des informations fixes 
     fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
     for i in range(len(fdata)) :
         if "," not in fdata[i]:
-            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
+            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global.
         else :
             fdata[i]=fdata[i].split(",")
-            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse 
+            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse
             for j in range(len(fdata[i])):
                 fdata[i][j]=float(fdata[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
     nah=fdata.pop()
     return nah
 
 def dataj(objet):#extracteur de données dans un fichier qui sera modifiable
-    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/Testfile.txt', 'r')
+    f=open('D:/Users/Nicolas/Documents/MHjdr/MHdatamod.txt', 'r')
     donnees=f.readlines()
     parsedData = []
     for line in donnees:
@@ -514,46 +552,72 @@ def dataj(objet):#extracteur de données dans un fichier qui sera modifiable
     fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
     for i in range(1,len(fdata)) :
         if "," not in fdata[i]:
-            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
+            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global.
         else :
             fdata[i]=fdata[i].split(",")
-            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse 
+            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse
             for j in range(len(fdata[i])):
                 fdata[i][j]=float(fdata[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
     return fdata
 
-def datascripter(tableau): #peremt d'éditer le fichier texte en prenant en argument le tableau qui servira à le compléter.
+def dataini(objet):#extracteur de données dans un fichier qui sera modifiable
+    f=open('D:/Users/Nicolas/Documents/MHjdr/MHdataini.txt', 'r')
+    donnees=f.readlines()
+    parsedData = []
+    for line in donnees:
+        if objet in line and "#" not in line :
+            parsedData.append((line.split(" ")))
+    fdata=parsedData[0] #parseddata apparait comme une liste d'une liste à cause du .appen. on ne garde que la liste interne qui est supposée unique.
+    for i in range(1,len(fdata)) :
+        if "," not in fdata[i]:
+            fdata[i]=float(fdata[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global.
+        else :
+            fdata[i]=fdata[i].split(",")
+            fdata[i].pop(0) #le premier terme est une ",", on s'en débarasse
+            for j in range(len(fdata[i])):
+                fdata[i][j]=float(fdata[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en nombres ses membres.
+    return fdata
+
+
+def datascripter(tableau,file): #peremt d'éditer le fichier texte en prenant en argument le tableau qui servira à le compléter.
     t=tableau
-    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/Testfile.txt', 'w')#fichier joueur
+    f=open(file, 'w')#fichier joueur
     for i in range (len(tableau)):
         for j in range(len(tableau[i])):
             t[i][j]=str(t[i][j])
             t[i][j]=t[i][j].replace("[",",",100)
             t[i][j]=t[i][j].replace("]","",100) #Obtient la structure d'extraction du fichier texte où les listes commencent par "," et dont les membres de la liste sont séparées par des ","
 
-        t[i]=' '.join(t[i])
-        t[i]=t[i]+chr(10)
+        t[i]=' '.join(t[i])#permet de transformer une liste en chaine de caractère en utilisant ' ' comme séparateur
+        t[i]=t[i]+chr(10)#truc de Etienne pour les sauts de lignes. à voir comment on peut changer ça
     for i in range(len(t)):
         t[i]=t[i].replace(", ",",",100)
+    j=0
+    while j in range(len(t)):
+        if t[j]=='\n\n':
+            t.pop(j)#permet de supprimer les sauts de ligne intempestifs
+        else:
+            j+=1
     f.writelines(t)
-    
-def datable(): #renvoie un tableau composé des lignes du fichier texte. C'est ce tableau qui sera ensuite réécri dans le même fichier texte pour actualisation.
-    f=open('D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/Testfile.txt', 'r')
+
+
+def datable(f): #renvoie un tableau composé des lignes du fichier texte. C'est ce tableau qui sera ensuite réécrit dans le même fichier texte pour actualisation.
+    f=open(f, 'r')
     donnees=f.readlines()
     t = [] #tableau initial. On introduit à l'intérieur les strings
     tf=[] #tableau final. on append les lignes à ce dernier
     for line in donnees :
         if "#" not in line :
-            t.append((line.split(" "))) 
+            t.append((line.split(" ")))
     for j in range(len(t)):
         l=t[j]#l est une liste de caractères
-        
+
         for i in range(1,len(l)) :
             if "," not in l[i]:
-                l[i]=float(l[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global. 
+                l[i]=float(l[i]) #la "," sert à indiquer puis indexer les listes de liste dans le string global.
             else :
                 l[i]=l[i].split(",")
-                l[i].pop(0) #le premier terme est une ",", on s'en débarasse 
+                l[i].pop(0) #le premier terme est une ",", on s'en débarasse
                 for j in range(len(l[i])):
                     l[i][j]=float(l[i][j]) #maintenant qu'on a identifié ce qui doit être une liste, on transforme en entiers ses membres.
         tf.append(l)
@@ -564,18 +628,23 @@ def tablemod(t,objet,idmod,mod): #permet de modifier une valeur en particulier d
     for i in range(len(t)):
         if objet in t[i][0]:
             t[i][idmod]+=mod
-            
+
+
 def tablemod2(t,ligne): #permet d'incorporer les lignes modifiées directement dans le tableau
     for i in range(len(t)):
         if t[i][0]==ligne[0]:
             t[i]=ligne
-            
-            
-            
+
+
+
+
+
+
+
+
 
 
 #D:/WINDOWS_SEVEN/Users/Nicolas_Admin/Documents/MHjdr/MHdata.txt
-
 
 
 
