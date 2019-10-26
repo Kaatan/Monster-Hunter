@@ -1,0 +1,9 @@
+SwordAndShield SwordAndShield
+Weakcombo 24,4,0,0
+Strongcombo 26,2.5,0,0
+Rounsdslash 30,1.5,0,0
+Gapcloser 20,1,0,0
+Shieldbash 20,1,20,0
+Backstrike 55,2,0,0
+BsHeavy 50,1,40,0
+BsLlight 25,1,0,0

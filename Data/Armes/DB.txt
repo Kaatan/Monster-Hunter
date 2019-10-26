@@ -1,0 +1,12 @@
+DualBlades DualBlades
+Gapcloser 15,1,0,0
+Basecombo 20,3,0,0
+Fourfold 30,3,0,1
+Eightfold 35,3,0,1
+Slingshot 60,3,0,2
+Demondance 120,8,0,3
+Dbrslash 30,2,0,1
+AdFourfold 25,3,0,0
+AdEightfold 30,3,0,0
+AdRslash 25,2,0,0
+AdDemondance 80,6,0,0

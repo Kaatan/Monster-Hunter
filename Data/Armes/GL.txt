@@ -1,0 +1,8 @@
+Gunlance Gunlance
+Poke 20,1,0,0
+GdPoke 17,1,0,0
+Shot 10,0,0,0
+Chargedshot=Cshot 25,0,0,0
+Slam 35,1,0,0
+Boom=burstshot à entrer par le MJ (10*X,0)
+Wyvernfire 150,0,0,0

@@ -1,0 +1,16 @@
+Nom Test
+HP 57.0,60.0
+Eleres 0.0,0.0,0.0,0.0,0.0
+Eledef 60.0
+Def 60.0
+Arme Bow*
+DegatsEle 0.0,EleGlace
+Shield 0.0
+ArmorPerfo 0.0
+CriticalEle 0.0
+SharpnessBonus 0.0
+Sharpness Vert*
+RecoveryBonus 0.0
+Attaque 60.0
+Endurance 6.0,7.0
+Critique/Critdamage 10.0,25.0

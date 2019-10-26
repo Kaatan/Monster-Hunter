@@ -1,0 +1,15 @@
+SwitchAxe SwitchAxe
+Slam 30,1,0,0
+HnS=Wildswing 40,2,0,0
+Fadeslash 20,1,0,0
+AxeMorph 40,1,0,0
+Slash 30,1,0,0
+Doubleslash 70,2,0,0
+Swordmorph 30,1,0,0
+Spinningmorph 120,3,0,0
+Discharge 20,1,0,0
+Dischargetick 20,2,0,0
+Explosion à entrer par le MJ, de la forme (20+X*20,2+X)
+Zsumdischarge 28,1,0,0
+Zsdischargetick 12*2,2,0,0
+Zsexplosion à entrer par le MJ, de la forme (30*x+30, x+2)

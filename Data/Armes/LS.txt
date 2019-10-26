@@ -1,0 +1,13 @@
+Longsword Longsword
+Verticalslash 28,1,0,0
+Thrust 12,1,0,0
+Thrustcombo 27,1.5,0,0
+Fadingslash 25,1,0,0
+Spiritslash1 28,1,0,0
+Spritslash2 20,1,0,0
+Spiritslash3 50,2,0,0
+SpiritRslash 65,1,0,0
+Spiritthrust 20,0,0
+Spirithelmbreaker 65,2,0,0
+Spirithelmbreakerred 130,5,0,0
+Spiritcounter 25,1,0,0

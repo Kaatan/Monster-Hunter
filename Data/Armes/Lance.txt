@@ -1,0 +1,6 @@
+Lance Lance
+Poke 15,1,0,0
+Pokecombo 28,2,0,0
+Pokefinisher 40,1,0,0
+Assault 24,3,0,0
+Shieldbash 15,1,20,0

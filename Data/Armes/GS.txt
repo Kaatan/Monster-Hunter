@@ -1,0 +1,17 @@
+GreatSword GreatSword
+Vslash0 50,1,0,0
+Vslash1 65,1,0,0
+Vslash2 80,1.5,0,0
+Vslash3 110,2,0,0
+Scharge0 70,1,0,0
+Scharge1 91,1,0,0
+Scharge2 112,1,5,0,0
+Scharge3 154,2,0,0
+Ssweep0 60,1,0,0
+Ssweep1 78,1,0,0
+Ssweep2 96,1.5,0,0
+Ssweep3 132,2,0,0
+Sbash0 30,1,20,0
+Sbash1 39,1,26,0
+Sbash2 48,1.5,32,0
+Sbash3 66,2,44,0

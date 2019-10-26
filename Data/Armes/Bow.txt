@@ -1,0 +1,9 @@
+Arc Arc
+Shot1 10,1,0,1
+Shot2 26,2.5,0,1
+Shot3 45,3.7,0,1
+Shot4 62,5,0,1
+Spread1 30,3.5,0,1
+Spread2 40,4.8,0,1
+Spread3 50,6,0,1
+Spread4 60,7,0,1

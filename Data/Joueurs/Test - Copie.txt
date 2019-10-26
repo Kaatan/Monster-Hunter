@@ -1,0 +1,14 @@
+Nom Test
+HP 60,60 
+Eleres 0,0,0,0,0
+Eledef 60
+Def 60
+Arme Lance*
+DégatsEle 0,EleGlace
+Shield 0
+ArmorPerfo 0
+CriticalEle 0
+SharpnessBonus 0
+Sharpness Vert*
+RecoveryBonus 0
+Attaque 60
